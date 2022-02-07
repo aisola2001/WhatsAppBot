@@ -1,6 +1,6 @@
 const fs = require("fs");
 const qrcode = require("qrcode-terminal");
-const {Client} = require("whatsapp-web.js");
+const { Client } = require("whatsapp-web.js");
 
 // Ruta donde se guardará la data de la sesión
 const SESSION_FILE_PATH = "./session.json";
@@ -18,14 +18,14 @@ const bot = new Client({
 bot.initialize();
 
 bot.on("qr", (qr) => {
-    qrcode.generate(qr, {small: true});
+    qrcode.generate(qr, { small: true });
 });
 
 // Guardar valores de sesión en el archivo luego de una autenticación exitosa
 bot.on("authenticated", (session) => {
     sessionData = session;
-    fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function(err){
-        if(err){
+    fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function(err) {
+        if (err) {
             console.error("¡Error!", err);
         }
     });
@@ -42,9 +42,11 @@ bot.on("ready", () => {
 
 let is_new_number = true;
 bot.on("message", message => {
-    let test_number = "549" + "" + "@c.us";
-    if(message.from === test_number){
-        if(is_new_number){
+    console.log(message.body)
+    let test_number = "549" + "1149375045" + "@c.us";
+    if (message.from === test_number) {
+        //let test_number = message.from;
+        if (is_new_number) {
             is_new_number = false;
             welcome_message = "¡Hola!\n";
             welcome_message += "\nSoy AIBot (por Azar & Isola) y soy el robot de City Gas 🤖\n";
@@ -55,16 +57,16 @@ bot.on("message", message => {
             welcome_message += "\nPor favor, escriba la letra que corresponda a su elección. Gracias.";
             bot.sendMessage(test_number, welcome_message);
         }
-        if(message.body.toUpperCase === "A"){
+        if (message.body.toUpperCase === "A") {
             consult_client_message = "Ha seleccionado _Consulta de Cliente por Número de Teléfono_";
             bot.sendMessage(test_number, consult_client_message);
-        }else if(message.body.toUpperCase === "B"){
+        } else if (message.body.toUpperCase === "B") {
             sending_an_order_message = "Ha seleccionado _Envío de un Pedido_";
             bot.sendMessage(test_number, consult_client_message);
-        }else if(message.body.toUpperCase === "C"){
+        } else if (message.body.toUpperCase === "C") {
             consult_order_message = "Ha seleccionado _Consulta de un Pedido_";
             bot.sendMessage(test_number, consult_client_message);
-        }else{
+        } else {
             bad_message = "¡Uy! No entendí 🤯\n";
             bad_message += "\nPor favor, vuelva a intentarlo.";
             bot.sendMessage(test_number, bad_message);
